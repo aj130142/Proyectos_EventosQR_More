@@ -1,6 +1,8 @@
 import barcode
+import os
 from numpy import random
 from barcode.writer import ImageWriter
+from pathlib import Path
 #argumentos default
 
 barrasCode39='code39'
@@ -24,11 +26,16 @@ class numero():
         contadorNumero=len(str(numero))
         
         return numero,contadorNumero
+    
     def codigoBarras(self,numCode,nameCode,tipoCodigo):#crea codigos de barras tipo formato, numero y nombre 
         
-        code39 = barcode.get_barcode_class(tipoCodigo)
-        codigo = code39(numCode, writer=ImageWriter(),add_checksum=False)
-        codigo.save(nameCode)
+        code3 = barcode.get_barcode_class(tipoCodigo)
+        codigo = code3(numCode, writer=ImageWriter(),add_checksum=False)
+        rutaBase=Path.cwd().as_posix()
+        print(rutaBase)
+        ruta=rutaBase+"/media/"+numCode
+        codigo.save(ruta)
+        
     def unionCodigo(self,justoSTR,justInt):
         codigoFinal=''+justoSTR+justInt
         
