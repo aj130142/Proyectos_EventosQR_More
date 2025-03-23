@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class metodos(tk.Toplevel):
     en_uso = False
     def __init__(self, *args, **kwargs):

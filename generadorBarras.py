@@ -21,7 +21,7 @@ class numero():
             lista.append(abcd[x])
         codigoLetras="".join(lista)
         return codigoLetras
-    def numeroContar(self,numero): #extrae la ultima cantidad de participantes le suma uno al agregar otro y numero digitos que tiene
+    def numeroContar(self,numero): #extrae la ultima cantidad de participantes le suma uno al agregar otro y numeros de digitos que tiene
         numero =numero+1
         contadorNumero=len(str(numero))
         
@@ -32,7 +32,6 @@ class numero():
         code3 = barcode.get_barcode_class(tipoCodigo)
         codigo = code3(numCode, writer=ImageWriter(),add_checksum=False)
         rutaBase=Path.cwd().as_posix()
-        print(rutaBase)
         ruta=rutaBase+"/media/"+numCode
         codigo.save(ruta)
         
@@ -40,13 +39,15 @@ class numero():
         codigoFinal=''+justoSTR+justInt
         
         return codigoFinal
+    def iniciarCodigo(self):
+        hola=clases.numeroContar(int(numeroInvitado))#metodo para obtener datos y sumar + 1
+
+        number=int(numeroLargo)-hola[1]-1 #ajusta la cantidad de letras requeridas
+
+        abecario= clases.letrasRandom(number) #crea letras random
+
+        codigoBar= clases.unionCodigo(abecario,str(hola[0])) # devuelve un numero de barras
+
+        clases.codigoBarras(codigoBar,nombreInvitado,barrasCode39) #crea la imagen para codigo de barras
 clases=numero()
-hola=clases.numeroContar(int(numeroInvitado))#metodo para obtener datos y sumar + 1
-
-number=int(numeroLargo)-hola[1]-1 #ajusta la cantidad de letras requeridas
-
-abecario= clases.letrasRandom(number) #crea letras random
-
-codigoBar= clases.unionCodigo(abecario,str(hola[0])) # devuelve un numero de barras
-
-clases.codigoBarras(codigoBar,nombreInvitado,barrasCode39) #crea la imagen para codigo de barras
+clases.iniciarCodigo()
