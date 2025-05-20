@@ -5,10 +5,7 @@ from barcode.writer import ImageWriter
 from pathlib import Path
 #argumentos default
 
-barrasCode39='code39'
-numeroInvitado=input("Coloque el numero ultimo invitado")
-numeroLargo=input("Coloque el largo del codigo de barras")
-nombreInvitado=input("Coloque el nombre del invitado")
+
 class numero():
     def letrasRandom(self,numeroLetras):#metodo funcional sirve para poder extraer una cantidad determinadad de letras
         lista=[]                         
@@ -39,15 +36,16 @@ class numero():
         codigoFinal=''+justoSTR+justInt
         
         return codigoFinal
-    def iniciarCodigo(self):
-        hola=clases.numeroContar(int(numeroInvitado))#metodo para obtener datos y sumar + 1
+    
+    def runGenerador(self,numInvi,numLarge,nomInv,tipeCode):
+        hola=clases.numeroContar(int(numInvi))#metodo para obtener datos y sumar + 1
 
-        number=int(numeroLargo)-hola[1]-1 #ajusta la cantidad de letras requeridas
+        number=int(numLarge)-hola[1]-1 #ajusta la cantidad de letras requeridas
 
         abecario= clases.letrasRandom(number) #crea letras random
 
         codigoBar= clases.unionCodigo(abecario,str(hola[0])) # devuelve un numero de barras
-
-        clases.codigoBarras(codigoBar,nombreInvitado,barrasCode39) #crea la imagen para codigo de barras
+        
+        clases.codigoBarras(codigoBar,nomInv,tipeCode) #crea la imagen para codigo de barras
 clases=numero()
-clases.iniciarCodigo()
+ 
