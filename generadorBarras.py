@@ -38,14 +38,12 @@ class numero():
         return codigoFinal
     
     def runGenerador(self,numInvi,numLarge,nomInv,tipeCode):
-        hola=clases.numeroContar(int(numInvi))#metodo para obtener datos y sumar + 1
+        hola=self.numeroContar(int(numInvi))#metodo para obtener datos y sumar + 1
 
         number=int(numLarge)-hola[1]-1 #ajusta la cantidad de letras requeridas
 
-        abecario= clases.letrasRandom(number) #crea letras random
+        abecario= self.letrasRandom(number) #crea letras random
 
-        codigoBar= clases.unionCodigo(abecario,str(hola[0])) # devuelve un numero de barras
+        codigoBar= self.unionCodigo(abecario,str(hola[0])) # devuelve un numero de barras
         
-        clases.codigoBarras(codigoBar,nomInv,tipeCode) #crea la imagen para codigo de barras
-clases=numero()
- 
+        self.codigoBarras(codigoBar,(nomInv),tipeCode) #crea la imagen para codigo de barras

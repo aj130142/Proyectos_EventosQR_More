@@ -5,8 +5,10 @@ class MiApp(tk.Tk):
         super().__init__()  # Inicializar la clase padre (tk.Tk)
         contador=[0]
         # Configuración inicial de la ventana
+        self.strAlto="600"
+        self.strAncho="600"
         self.title("Botones Dinámicos con Scroll")          # Título
-        self.geometry("600x600")       # Tamaño (ancho x alto)
+        self.centrarventanaPrincipal()      # Tamaño (ancho x alto)
         self.resizable(True, False)     # Permitir redimensionar (ancho, alto)
         self.contador= contador
         #otra parte del codigo
@@ -14,16 +16,39 @@ class MiApp(tk.Tk):
         self.agregar_boton()
         self.cargar_botones()
         self.auto_btn()
-        self.open_new_frame()
+        self.ventanaLogin()
         
         # Llamar a métodos de inicialización
         #self.contador[0]()
         
+    def centrarventanaPrincipal(self):
+    # Obtener dimensiones de la pantalla
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        ancho=int(self.strAncho)
+        alto=int(self.strAncho)
+        # Calcular posición x, y
+        x = (screen_width - ancho) // 2
+        y = (screen_height - alto) // 2
+        
+        # Aplicar geometría
+        self.geometry(f"{self.strAncho}x{self.strAlto}+{x}+{y}")
 
-
+    def centrarVentanas(self,ventana,ancho,alto):
+        screen_width = ventana.winfo_screenwidth()
+        screen_height = ventana.winfo_screenheight()
+        
+        # Calcular posición x, y
+        x = (screen_width - ancho) // 2
+        y = (screen_height - alto) // 2
+        
+        # Aplicar geometría
+        ventana.geometry(f"{ancho}x{alto}+{x}+{y}")
+    
     def crear_PrincipalFrame(self): #metodo para crear los inicializar los canvas, scrollbar, etc.
         self.frame_principal = tk.Frame(self, bg="#f0f0f0")
         self.frame_principal.pack(fill="both", expand=True, padx=20, pady=20)
+        
         self.frame_controles = tk.Frame(self.frame_principal)
         self.frame_controles.pack(pady=10)
         self.canvas = tk.Canvas(self.frame_principal, bg="white")
@@ -76,17 +101,89 @@ class MiApp(tk.Tk):
         fg="black"
         )
         self.btn_agregar.pack()
-    def open_new_frame(self):
-        self.new_frame = tk.Toplevel(self.frame_principal)
-        self.new_frame.title("New Frame")
-
-        self.new_frame.transient(self.frame_principal)
-        self.new_frame.protocol("WM_DELETE_WINDOW", self.destroy)
-        self.new_frame.configure(takefocus=True)
-        self.new_frame.grab_set()
-        # Add widgets to the new frame as needed
-        self.label = tk.Label(self.new_frame, text="This is a new frame")
-        self.label.pack(padx=20, pady=20,side="left")
+    def ventanaLogin(self):
+        anchoHere=150
+        altoHere=60
+        self.loginFrame = tk.Toplevel(self.frame_principal)
+        self.loginFrame.title("Login")
+        self.loginFrame.geometry(f"{anchoHere}x{altoHere}")  # Establece tamaño primero
+        self.loginFrame.resizable(False, False)
+        
+        self.loginFrame.update_idletasks() 
+        self.centrarVentanas(self.loginFrame,anchoHere,altoHere)
+        self.loginFrame.transient(self.frame_principal)
+        self.loginFrame.protocol("WM_DELETE_WINDOW", self.destroy)
+        self.loginFrame.configure(takefocus=True)
+        self.loginFrame.grab_set()
+        self.loginFrame.geometry("250x200")
+       
+        self.labelFast(self.loginFrame,10,10,"Iniciar sesion")
+        
+        self.labelFast(self.loginFrame,10,35,"Nombre")
+        
+        self.labelFast(self.loginFrame,10,95,"Contraseña (si la hay)")
+        
+        self.nameUser = tk.Entry(self.loginFrame)
+        self.nameUser.place(width=150,height=20,x=10,y=60)
+        
+        self.passUser = tk.Entry(self.loginFrame)
+        self.passUser.place(width=150,height=20,x=10,y=120)
+        
+        self.btnFast(self.loginFrame,10,150,100,30,"Ingresar",self.loginFrame.destroy)
+        self.btnFast(self.loginFrame,140,150,100,30,"Crear Usuario",self.crearUser)
+    
+    def crearUser(self):
+        anchoHere=150
+        altoHere=60
+        self.makeUser = tk.Toplevel(self.frame_principal)
+        self.makeUser.title("Login")
+        self.makeUser.geometry(f"{anchoHere}x{altoHere}")  # Establece tamaño primero
+        self.makeUser.resizable(False, False)
+        
+        self.makeUser.update_idletasks() 
+        self.centrarVentanas(self.makeUser,anchoHere,altoHere)
+        self.centrarVentanas(self.makeUser,anchoHere,altoHere)
+        self.makeUser.transient(self.frame_principal)
+        self.makeUser.protocol("WM_DELETE_WINDOW", self.makeUser.destroy)
+        self.makeUser.configure(takefocus=True)
+        self.makeUser.grab_set()
+        self.makeUser.geometry("250x200")
+        
+        self.checkValue = tk.BooleanVar(self.makeUser) # Create a BooleanVar
+        self.checkValue.set(False)
+        
+        self.labelFast(self.makeUser,10,10,"Crear nuevo usuario")
+        self.labelFast(self.makeUser,10,30,"Nombre")
+        self.labelFast(self.makeUser,10,90,"Contraseña")
+        
+        self.nameUser = tk.Entry(self.makeUser)
+        self.nameUser.place(width=150,height=20,x=10,y=60)
+        
+        self.passUser = tk.Entry(self.makeUser)
+        self.passUser.place(width=150,height=20,x=10,y=120)
+        
+        self.checkDefaultpass(self.makeUser,"Opcion",self.checkValue,10,160,self.mesanjePrubea)
+    
+    def labelFast(self,upFrame,xPos,yPos,texto,):
+        
+        label = tk.Label(upFrame, text=texto)
+        label.place(x=xPos,y=yPos)
+    
+    def btnFast(self,upFrame,xPos,yPos,entWidth,entHeight,texto,btnFuncion):
+        
+        botonGenerico = tk.Button(upFrame,text=texto,command=btnFuncion)
+        botonGenerico.place(width=entWidth,height=entHeight,x=xPos,y=yPos)
+        
+    def checkDefaultpass(self,upFrame,texto,varible,xPos,yPos,command):
+        checkbox = tk.Checkbutton(upFrame, text=texto, variable=varible, command=self.mesanjePrubea)
+        checkbox.place(x=xPos,y=yPos)
+        
+    def mesanjePrubea(self):
+        if self.checkValue.get():
+            print("encendido")
+        else:
+            print("apagado")
+        
     def iniciar(self):
         self.vista.mainloop()
 
