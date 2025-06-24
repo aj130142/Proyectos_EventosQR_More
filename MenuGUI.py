@@ -6,6 +6,7 @@ class MiApp(tk.Tk):
         contador=[0]
         # Configuración inicial de la ventana
         self.strAlto="600"
+        variable=self.strAlto
         self.strAncho="600"
         self.title("Botones Dinámicos con Scroll")          # Título
         self.centrarventanaPrincipal()      # Tamaño (ancho x alto)
@@ -66,6 +67,16 @@ class MiApp(tk.Tk):
         # Configurar actualización automática del scroll
         self.frame_interior.bind("<Configure>", lambda e: self.actualizar_scrollregion())
 
+        self.menuButon = tk.Menu(self)
+        self.menuSesion = tk.Menu(self.menuButon, tearoff=0)
+        
+        self.menuButon.add_cascade(menu=self.menuSesion, label="Archivo")
+        self.menuSesion.add_command(label="textos",accelerator="combiWord",command=self.devolver)
+        
+        
+        
+        
+        self.config(menu=self.menuButon)
     def agregar_boton(self):
         # Crear un nuevo botón y agregarlo al frame interior
         self.imagen = tk.PhotoImage(width=50, height=50)
@@ -159,15 +170,16 @@ class MiApp(tk.Tk):
         self.nameUser = tk.Entry(self.makeUser)
         self.nameUser.place(width=150,height=20,x=10,y=60)
         
-        self.passUser = tk.Entry(self.makeUser)
-        self.passUser.place(width=150,height=20,x=10,y=120)
+        
+        self.passUser = tk.Entry(self.makeUser).place(width=150,height=20,x=10,y=120)
+        
         
         self.checkDefaultpass(self.makeUser,"Opcion",self.checkValue,10,160,self.mesanjePrubea)
     
     def labelFast(self,upFrame,xPos,yPos,texto,):
         
-        label = tk.Label(upFrame, text=texto)
-        label.place(x=xPos,y=yPos)
+        label = tk.Label(upFrame, text=texto).place(x=xPos,y=yPos)
+ 
     
     def btnFast(self,upFrame,xPos,yPos,entWidth,entHeight,texto,btnFuncion):
         
@@ -178,14 +190,22 @@ class MiApp(tk.Tk):
         checkbox = tk.Checkbutton(upFrame, text=texto, variable=varible, command=self.mesanjePrubea)
         checkbox.place(x=xPos,y=yPos)
         
+    
+        
     def mesanjePrubea(self):
         if self.checkValue.get():
             print("encendido")
         else:
             print("apagado")
         
-    def iniciar(self):
-        self.vista.mainloop()
+    def devolver(self):
+        numero=1
+        return numero
+    def frameLoop(self):
+        app = MiApp()    # Instanciar la aplicación
+    
+        app.mainloop() 
+    
 
 if __name__ == "__main__":
     app = MiApp()    # Instanciar la aplicación
