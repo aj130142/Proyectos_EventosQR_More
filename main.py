@@ -1,3 +1,7 @@
-from interController import conecDatos as codeRun
+from MenuGUI import MiApp as frameGUI 
 
-inicializar = codeRun()
+
+
+
+if __name__ == "__main__":
+    frameGUI.frameLoop()

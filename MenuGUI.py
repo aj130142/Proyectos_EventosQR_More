@@ -1,10 +1,16 @@
+from controllerVentana import conectarControles as conectSimple
+from Core_BDD.Sql import mySQLOperacion
+from tkinter import messagebox as MessageBox
 import tkinter as tk
+
+
 
 class MiApp(tk.Tk):
     def __init__(self):
         super().__init__()  # Inicializar la clase padre (tk.Tk)
         contador=[0]
         # Configuración inicial de la ventana
+        self.sqlOpera= mySQLOperacion()
         self.strAlto="600"
         variable=self.strAlto
         self.strAncho="600"
@@ -14,10 +20,14 @@ class MiApp(tk.Tk):
         self.contador= contador
         #otra parte del codigo
         self.crear_PrincipalFrame()
-        self.agregar_boton()
-        self.cargar_botones()
+        #self.agregar_boton()
+        #self.cargar_botones()
+        self.primerBoton()
         self.auto_btn()
         self.ventanaLogin()
+        
+        
+        
         
         # Llamar a métodos de inicialización
         #self.contador[0]()
@@ -53,6 +63,7 @@ class MiApp(tk.Tk):
         self.frame_controles = tk.Frame(self.frame_principal)
         self.frame_controles.pack(pady=10)
         self.canvas = tk.Canvas(self.frame_principal, bg="white")
+        self.canvas
         self.scrollbar = tk.Scrollbar(self.frame_principal, orient=tk.VERTICAL, command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
@@ -74,18 +85,45 @@ class MiApp(tk.Tk):
         self.menuSesion.add_command(label="textos",accelerator="combiWord",command=self.devolver)
         
         
-        
+  
         
         self.config(menu=self.menuButon)
-    def agregar_boton(self):
-        # Crear un nuevo botón y agregarlo al frame interior
+        
+    def primerBoton(self):
         self.imagen = tk.PhotoImage(width=50, height=50)
         self.nuevo_boton = tk.Button(
             self.frame_interior,
-            text=f"Hola {self.contador[0] + 1}",
+            text=f"Crear BD \n➕",
             image=self.imagen,
             compound="center",
-            width=50,
+            width=100,
+            command=self.agregar_boton
+        )
+        self.nuevo_boton.imagen = self.imagen 
+        self.nuevo_boton.pack(pady=10, anchor="w")
+
+        self.contador[0] += 1  # Actualizar contador
+        self.actualizar_scrollregion()
+    
+    def agregar_boton(self):
+        # Crear un nuevo botón y agregarlo al frame interior
+        
+        nombreExportado = conectSimple.devolverName(None)
+        
+        if nombreExportado is None:
+            nombreExportado="hola"
+        elif not nombreExportado:
+            nombreExportado="hola"
+        else:
+            print("hubp error")
+        
+        self.imagen = tk.PhotoImage(width=60, height=60)
+        self.nuevo_boton = tk.Button(
+            self.frame_interior,
+            text=f" {nombreExportado} {self.contador[0] + 1}",
+            image=self.imagen,
+            compound="center",
+            width=100,
             command=lambda n=self.contador[0]: print(f"Botón {n + 1} clickeado")
         )
         self.nuevo_boton.imagen = self.imagen 
@@ -100,7 +138,7 @@ class MiApp(tk.Tk):
 
     def cargar_botones(self):
         
-        for _ in range(5):
+        for _ in range(0):
             self.agregar_boton()
             
     def auto_btn(self):
@@ -127,7 +165,7 @@ class MiApp(tk.Tk):
         self.loginFrame.configure(takefocus=True)
         self.loginFrame.grab_set()
         self.loginFrame.geometry("250x200")
-       
+        
         self.labelFast(self.loginFrame,10,10,"Iniciar sesion")
         
         self.labelFast(self.loginFrame,10,35,"Nombre")
@@ -137,11 +175,28 @@ class MiApp(tk.Tk):
         self.nameUser = tk.Entry(self.loginFrame)
         self.nameUser.place(width=150,height=20,x=10,y=60)
         
+        
         self.passUser = tk.Entry(self.loginFrame)
         self.passUser.place(width=150,height=20,x=10,y=120)
         
-        self.btnFast(self.loginFrame,10,150,100,30,"Ingresar",self.loginFrame.destroy)
+        
+        
+        
+        self.btnFast(self.loginFrame,10,150,100,30,"Ingresar",self.comprobarUser)
         self.btnFast(self.loginFrame,140,150,100,30,"Crear Usuario",self.crearUser)
+        
+    def comprobarUser(self):
+        NombreUser=self.nameUser.get()
+        passWo=self.passUser.get()
+        valorBoo=self.sqlOpera.consultaUser(str(NombreUser),str(passWo))
+        
+        if(valorBoo):
+            
+            self.loginFrame.destroy()
+            MessageBox.showinfo("Mensanje","Inicio de sesion exitosa")
+            
+        else:
+            MessageBox.showwarning("Error 909","Error de usuario o contraseña ")
     
     def crearUser(self):
         anchoHere=150
@@ -164,17 +219,42 @@ class MiApp(tk.Tk):
         self.checkValue.set(False)
         
         self.labelFast(self.makeUser,10,10,"Crear nuevo usuario")
-        self.labelFast(self.makeUser,10,30,"Nombre")
+        self.labelFast(self.makeUser,10,30,"Nombre:")
         self.labelFast(self.makeUser,10,90,"Contraseña")
         
-        self.nameUser = tk.Entry(self.makeUser)
-        self.nameUser.place(width=150,height=20,x=10,y=60)
+        self.ingresaName = tk.Entry(self.makeUser)
+        self.ingresaName.place(width=150,height=20,x=10,y=60)
         
+        self.ingresapassUser = tk.Entry(self.makeUser)
+        self.ingresapassUser.place(width=150,height=20,x=10,y=120)
         
-        self.passUser = tk.Entry(self.makeUser).place(width=150,height=20,x=10,y=120)
+        self.btnFast(self.makeUser,140,150,100,30,"Crear Usuario",self.consultaCrearUsuario)
         
+        self.checkDefaultpass(self.makeUser,"Sin contraseña",self.checkValue,10,160,self.mesanjePrubea)
         
-        self.checkDefaultpass(self.makeUser,"Opcion",self.checkValue,10,160,self.mesanjePrubea)
+    def consultaCrearUsuario(self):
+        boolean=False
+        existe=True
+        nombreU=""
+        passWord=""
+        nombreU=self.ingresaName.get()
+        passWord=self.ingresapassUser.get()
+        
+        existe=self.sqlOpera.buscarNameUser(nombreU)
+        
+        boolean=self.mesanjePrubea()
+        if(existe!=True):
+            if(passWord != '' and passWord != ''):
+                self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
+                
+            if(passWord == '' and boolean):
+                passWord="admin"
+                self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
+                
+            if(passWord == ''):
+                MessageBox.showwarning("Error 908","Agrege la contraseña")
+        else:
+            MessageBox.showwarning("Error 808","El usuario ya existe")
     
     def labelFast(self,upFrame,xPos,yPos,texto,):
         
@@ -194,20 +274,22 @@ class MiApp(tk.Tk):
         
     def mesanjePrubea(self):
         if self.checkValue.get():
-            print("encendido")
+            return True
         else:
-            print("apagado")
+            return False
         
     def devolver(self):
         numero=1
-        return numero
-    def frameLoop(self):
+        conectSimple.imprimirdato(numero)
+        
+    def frameLoop():
         app = MiApp()    # Instanciar la aplicación
     
         app.mainloop() 
     
-
+'''''''''
 if __name__ == "__main__":
     app = MiApp()    # Instanciar la aplicación
     
     app.mainloop()   # Ejecutar el bucle principal
+    '''''
