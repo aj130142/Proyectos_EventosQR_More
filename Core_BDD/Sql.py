@@ -40,11 +40,11 @@ class mySQLOperacion:
     
     def crearUserTablas(self):
         #nombre, apellidos, fecha registrado,
-        query="CREATE TABLE  IF NOT EXISTS useradmin.userperfil (userID int AUTO_INCREMENT PRIMARY KEY, usaerNombre varchar(255)  NOT NULL UNIQUE, contrasena varchar(255))"
+        query="CREATE TABLE  IF NOT EXISTS useradmin.userperfil (userID int AUTO_INCREMENT PRIMARY KEY, userNombre varchar(255)  NOT NULL UNIQUE, contrasena varchar(255))"
         self.mycursor.execute(query)
     
     def insertarUsuarioPerfil(self,nombre,contraseña):
-        query=f"INSERT INTO useradmin.userperfil (usaerNombre,contrasena) VALUES(%s,%s)"
+        query=f"INSERT INTO useradmin.userperfil (userNombre,contrasena) VALUES(%s,%s)"
         self.mycursor.execute(query,(nombre,contraseña))
         self.mydb.commit()
     def eliminarTabla(self,nombreTabla,nameDB):
@@ -57,7 +57,7 @@ class mySQLOperacion:
         
         if(passW==""):
             passW="admin"
-        query=f"SELECT * FROM   useradmin.userperfil WHERE usaerNombre = %s AND contrasena = %s "
+        query=f"SELECT * FROM   useradmin.userperfil WHERE userNombre = %s AND contrasena = %s "
         self.mycursor.execute(query,(userNombre,passW))
         myresult = self.mycursor.fetchone()
         
@@ -66,28 +66,16 @@ class mySQLOperacion:
         else:
             return False
     def buscarNameUser(self,nameUs):
-        query=f"SELECT * FROM  useradmin.userperfil WHERE usaerNombre = %s"
+        query=f"SELECT * FROM  useradmin.userperfil WHERE userNombre = %s"
         self.mycursor.execute(query,(nameUs,))
         myresult = self.mycursor.fetchone()
+        
+        if myresult is None:
+            return False
         
         if myresult[1] == nameUs:
             return True
         else:
             return False
-"""""""""
-sqlConec=mySQLOperacion()
 
-sqlConec.crearDB("hola")
 
-sqlConec.eliminarTabla("userperfil","hola")
-
-sqlConec.crearUserTablas()
-sqlConec.insertarUsuarioPerfil("Josue2","1341adfa")
-
-boole=sqlConec.consultaUser("Josue2","1341adfa")
-
-print(boole)
-
-#sqlConec.mostrarDB()
-#sqlConec.deleteDB("hola")
-"""""

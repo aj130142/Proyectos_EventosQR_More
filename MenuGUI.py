@@ -63,7 +63,7 @@ class MiApp(tk.Tk):
         self.frame_controles = tk.Frame(self.frame_principal)
         self.frame_controles.pack(pady=10)
         self.canvas = tk.Canvas(self.frame_principal, bg="white")
-        self.canvas
+       
         self.scrollbar = tk.Scrollbar(self.frame_principal, orient=tk.VERTICAL, command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
@@ -74,7 +74,7 @@ class MiApp(tk.Tk):
         # Frame interior para los botones
         self.frame_interior = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.frame_interior, anchor="nw")
-
+        
         # Configurar actualización automática del scroll
         self.frame_interior.bind("<Configure>", lambda e: self.actualizar_scrollregion())
 
@@ -239,23 +239,34 @@ class MiApp(tk.Tk):
         passWord=""
         nombreU=self.ingresaName.get()
         passWord=self.ingresapassUser.get()
-        
+        nu1=len(nombreU)
+        nu2=len(passWord)
         existe=self.sqlOpera.buscarNameUser(nombreU)
         
         boolean=self.mesanjePrubea()
-        if(existe!=True):
-            if(passWord != '' and passWord != ''):
-                self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
+        try:
+            if(existe!=True):
+                if(passWord != '' and passWord != ''):
+                    self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
+                    self.makeUser.destroy()
+                    MessageBox.showinfo("Usuario","Su usuario se creo correctamente")
+                if(passWord == '' and boolean):
+                    passWord="admin"
+                    self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
+                    self.makeUser.destroy()
+                    MessageBox.showinfo("Usuario","Su usuario se creo correctamente")
+                if(passWord == ''):
+                    MessageBox.showwarning("Error 908","Agrege la contraseña")
                 
-            if(passWord == '' and boolean):
-                passWord="admin"
-                self.sqlOpera.insertarUsuarioPerfil(nombreU,passWord)
-                
-            if(passWord == ''):
-                MessageBox.showwarning("Error 908","Agrege la contraseña")
-        else:
-            MessageBox.showwarning("Error 808","El usuario ya existe")
-    
+            else:
+                MessageBox.showwarning("Error 808","El usuario ya existe")
+        except:
+            MessageBox.showwarning("Error 801","Error al crear al usuario")
+            
+            self.ingresaName.delete(0, nu1)
+            self.ingresapassUser.delete(0, nu2)
+            
+            
     def labelFast(self,upFrame,xPos,yPos,texto,):
         
         label = tk.Label(upFrame, text=texto).place(x=xPos,y=yPos)
