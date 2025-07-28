@@ -1,6 +1,8 @@
 from controllerVentana import conectarControles as conectSimple
+from abc import ABC,abstractmethod
 from Core_BDD.Sql import mySQLOperacion
 from tkinter import messagebox as MessageBox
+from InsertarDatosGUI import adminGUI
 import tkinter as tk
 
 
@@ -97,6 +99,7 @@ class MiApp(tk.Tk):
             image=self.imagen,
             compound="center",
             width=100,
+            
             command=self.agregar_boton
         )
         self.nuevo_boton.imagen = self.imagen 
@@ -145,7 +148,7 @@ class MiApp(tk.Tk):
         self.btn_agregar = tk.Button(
         self.frame_controles,
         text="➕ Agregar Botón",
-        command=self.agregar_boton,
+        command=self.llamarVentanaExterna,
         bg="lightblue",
         fg="black"
         )
@@ -293,11 +296,22 @@ class MiApp(tk.Tk):
         numero=1
         conectSimple.imprimirdato(numero)
         
+    def llamarVentanaExterna(self):
+        ventanaInsert=adminGUI(self.frame_principal)
+        ventanaInsert.ventCrearTabla()
+        
+        
     def frameLoop():
         app = MiApp()    # Instanciar la aplicación
     
         app.mainloop() 
-    
+class complementos:
+    def __init__(self):
+        pass
+    def btnFast(self,upFrame,xPos,yPos,entWidth,entHeight,texto,btnFuncion):
+        
+        botonGenerico = tk.Button(upFrame,text=texto,command=btnFuncion)
+        botonGenerico.place(width=entWidth,height=entHeight,x=xPos,y=yPos)
 '''''''''
 if __name__ == "__main__":
     app = MiApp()    # Instanciar la aplicación

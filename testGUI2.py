@@ -1,12 +1,14 @@
-'''''''''
-    barrasCode39='code39'
-    numeroInvitado=input("Coloque el numero ultimo invitado")
-    numeroLargo=input("Coloque el largo del codigo de barras")
-    nombreInvitado=input("Coloque el nombre del invitado")
+funciones_con_args = []
 
+listaNombre=["¡Hola", "¿Qué tal?", "Adiós"]
 
+def saludar(nombre, tono):
+    return f"{tono} {nombre}!"
 
+for tono in listaNombre:
+    # Guardar solo la función con el tono preconfigurado
+    funciones_con_args.append(lambda nombre, t=tono: saludar(nombre, t))
 
-    geneCall = codigoBarras()
-    geneCall.runGenerador(numeroInvitado,numeroLargo,nombreInvitado,barrasCode39)
-'''''
+# Llamar a las funciones
+print(funciones_con_args[0]("Sofía"))  # ¡Hola Sofía!
+print(funciones_con_args[1]("David"))  # ¿Qué tal? David!
