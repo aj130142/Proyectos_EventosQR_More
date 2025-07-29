@@ -1,20 +1,37 @@
 import tkinter as tk
 
-def mostrar_seleccion(opcion):
-    etiqueta.config(text=f"Seleccionaste: {opcion}")
+class App:
+    def __init__(self, root):
+        self.root = root
+        self.valor_actual = None
+        
+        boton = tk.Button(root, text="Guardar 42")
+        boton.numero = 42
+        boton.bind("<Button-1>", self.manejar_presion)
+        boton.pack(pady=20)
+        
+        boton1 = tk.Button(root, text="Guardar 42")
+        boton1.numero = 32
+        boton1.bind("<Button-1>", self.manejar_presion)
+        boton1.pack(pady=20)
+        
+        # Etiqueta para mostrar el valor
+        self.etiqueta = tk.Label(root, text="Presiona un botón")
+        self.etiqueta.pack()
 
-ventana = tk.Tk()
-ventana.title("Menú de Opciones")
-ventana.geometry("600x600")
+    def manejar_presion(self, event):
+        # Recuperar y almacenar el valor
+        self.valor_actual = event.widget.numero
+        
+        # Actualizar interfaz
+        self.etiqueta.config(text=f"Valor: {self.valor_actual}")
+        
+        # También puedes pasar el valor a otras funciones
+        self.procesar_valor(self.valor_actual)
+    
+    def procesar_valor(self, numero):
+        print(f"Procesando valor: {self.valor_actual * 2}")
 
-opciones = ["Opción 1", "Opción 2", "Opción 3"]
-variable_seleccionada = tk.StringVar(ventana)
-variable_seleccionada.set(opciones[0])  # Establecer un valor inicial
-
-menu_opciones = tk.OptionMenu(ventana, variable_seleccionada, *opciones, command=mostrar_seleccion)
-menu_opciones.pack(pady=100)
-
-etiqueta = tk.Label(ventana, text="")
-etiqueta.pack()
-
-ventana.mainloop()
+root = tk.Tk()
+app = App(root)
+root.mainloop()
