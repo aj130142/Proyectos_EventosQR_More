@@ -151,18 +151,22 @@ class adminGUI:
         self.actualizar_scrollregion()
     def mostraDatosentry(self):
         
-        hola=self.listaEntry[0].get()
-        combo1=self.listaCombo[0].get()
-        if len(self.listaEntry)>=2:
-            hola1=self.listaEntry[1].get()
-            combo2=self.listaCombo[1].get()
-            
-            print(hola1)
-            print(combo2)
-        print(self.newNumero)
-        print(hola)
-        print(combo1)
+        numEntry=len(self.listaEntry)
         
+        for i in range(numEntry):
+            
+            pass
+            
+    def interPretar(self):
+        ideTipo=""
+        nameNormal=["Numeros","Decimal","Moneda","Texto normal","Texto largo","Año/mes/dia","Horas/Minutos/Segundos","Archivos Fotos,PDF(16MB)","Archivos<4GB","Correo electronico","CodigosQR"]
+        nameSQL=["int","decimal","float","Money","Varchar(255)","text","Date","Time","Datetime","Mediumblob","Longblob","Email","CodigoQR"]
+        for i in range(len(self.listaCombo)):
+            match(ideTipo):
+                case (ideTipo)if ideTipo==nameNormal[0]:
+                    self.listaCombo[i]="int"
+    
+    
     def checkDefaultpass(self,upFrame,texto,varible,roW,colW,commando):
         checkbox = Checkbutton(upFrame, text=texto, variable=varible, command=commando)
         checkbox.grid(row=roW,column=colW,padx=10)

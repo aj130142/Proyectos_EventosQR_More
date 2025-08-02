@@ -1,14 +1,17 @@
-funciones_con_args = []
+import pathlib
 
-listaNombre=["¡Hola", "¿Qué tal?", "Adiós"]
 
-def saludar(nombre, tono):
-    return f"{tono} {nombre}!"
 
-for tono in listaNombre:
-    # Guardar solo la función con el tono preconfigurado
-    funciones_con_args.append(lambda nombre, t=tono: saludar(nombre, t))
+def conversor(by,MBorGB):
+    match(MBorGB):
+        case MBorGB if MBorGB=="KB":
+            totalF=by/1000
+        case MBorGB if MBorGB=="MB":
+            totalF=by/1000000
+        case MBorGB if MBorGB=="GB":
+            totalF=by/1000000000
+    return totalF
+p = pathlib.Path("C:/Users/chino/Downloads/SERVER_EVAL_x64FRE_es-es.iso")
 
-# Llamar a las funciones
-print(funciones_con_args[0]("Sofía"))  # ¡Hola Sofía!
-print(funciones_con_args[1]("David"))  # ¿Qué tal? David!
+MBs=conversor(p.stat().st_size,"GB")
+print(MBs)

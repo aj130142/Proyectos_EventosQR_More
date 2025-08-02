@@ -1,5 +1,7 @@
 import mysql.connector
 import re
+from metodos import hashCrypt
+
 class mySQLOperacion:
 
     def __init__(self):
@@ -44,6 +46,8 @@ class mySQLOperacion:
         self.mycursor.execute(query)
     
     def insertarUsuarioPerfil(self,nombre,contraseña):
+        geneadorHash=hashCrypt()
+        contraseña=geneadorHash.encript(contraseña)
         query=f"INSERT INTO useradmin.userperfil (userNombre,contrasena) VALUES(%s,%s)"
         self.mycursor.execute(query,(nombre,contraseña))
         self.mydb.commit()
@@ -57,11 +61,14 @@ class mySQLOperacion:
         
         if(passW==""):
             passW="admin"
-        query=f"SELECT * FROM   useradmin.userperfil WHERE userNombre = %s AND contrasena = %s "
-        self.mycursor.execute(query,(userNombre,passW))
+        generarHash=hashCrypt()
+        
+        query=f"SELECT * FROM   useradmin.userperfil WHERE userNombre = %s"
+        self.mycursor.execute(query,(userNombre,))
         myresult = self.mycursor.fetchone()
         
-        if myresult is not None:
+        sucess=generarHash.comparar(passW,str(myresult[2]))
+        if sucess:
             return True
         else:
             return False
